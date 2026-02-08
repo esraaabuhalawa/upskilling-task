@@ -7,25 +7,29 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UsersService {
 
-   private readonly httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   //all Users Data
   getAllUsers() {
     return this.httpClient.get(`${environment.baseUrl}user`)
   }
 
+  //get User Data
+  getUserData(id: string) {
+    return this.httpClient.get(`${environment.baseUrl}user/${id}`)
+  }
   //Add User
-  addUser(data:object){
+  addUser(data: object) {
     return this.httpClient.post(`${environment.baseUrl}user/create`, data)
   }
 
   //Update User
-  updateUser(id:string ,data:object){
+  updateUser(id: string, data: object) {
     return this.httpClient.put(`${environment.baseUrl}user/${id}`, data)
   }
 
   //delete User
-  daleteUser(id:string){
+  daleteUser(id: string) {
     return this.httpClient.delete(`${environment.baseUrl}user/${id}`)
   }
 }
