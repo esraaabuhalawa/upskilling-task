@@ -22,7 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './add.component.scss',
 })
 export class AddComponent implements OnInit {
-   userForm!: FormGroup;
+  userForm!: FormGroup;
   imagePreview: string | null = null;
   selectedFile: File | null = null;
   userId: string | null = null;
@@ -30,20 +30,28 @@ export class AddComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private userService :UsersService,
+    private userService: UsersService,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService :MessageService
-  ) {}
+    private messageService: MessageService
+  ) { }
 
+  isViewMode: boolean = false;
   ngOnInit(): void {
     this.initializeForm();
 
     // Check if we're in edit mode
     this.userId = this.route.snapshot.paramMap.get('id');
+
     if (this.userId) {
-      this.isEditMode = true;
-      this.loadUserData();
+      const path = this.route.snapshot.url[1]?.path;
+      if (path === 'edit') {
+        this.isEditMode = true;
+        this.loadUserData();
+      } else if (path === 'view') {
+        this.isViewMode = true;
+        this.loadUserData();
+      }
     }
   }
 
@@ -52,7 +60,7 @@ export class AddComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required,Validators.pattern('^[0-9]{10,15}$')]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
       photo: this.fb.control<File | null>(null)
     });
   }
@@ -69,12 +77,15 @@ export class AddComponent implements OnInit {
           phone: user.phone
         });
 
+        if (this.isViewMode) {
+          this.userForm.disable();
+        }
         // Load existing image
         // if (user.picture) {
         //   this.imagePreview = user.picture;
         // }
       },
-      error: (err:any) => {
+      error: (err: any) => {
         console.error('Error loading user:', err);
       }
     });
@@ -119,139 +130,69 @@ export class AddComponent implements OnInit {
   }
 
   onSubmit(): void {
-  if (this.userForm.invalid) {
-    Object.keys(this.userForm.controls).forEach(key => {
-      this.userForm.get(key)?.markAsTouched();
-    });
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Form Invalid',
-      detail: 'Please fill all required fields correctly'
-    });
-    return;
-  }
-
-  const userData: any = {
-    firstName: this.userForm.get('firstName')?.value,
-    lastName: this.userForm.get('lastName')?.value,
-    email: this.userForm.get('email')?.value,
-    phone: this.userForm.get('phone')?.value
-  };
-
-  const request$ = this.isEditMode && this.userId
-    ? this.userService.updateUser(this.userId, userData)
-    : this.userService.createUser(userData);
-
-  request$.subscribe({
-    next: (res) => {
-      this.messageService.add({
-        severity: 'success',
-        summary: this.isEditMode ? 'User Updated' : 'User Created',
-        detail: this.isEditMode ? 'User updated successfully' : 'User created successfully'
+    if (this.userForm.invalid) {
+      Object.keys(this.userForm.controls).forEach(key => {
+        this.userForm.get(key)?.markAsTouched();
       });
-      this.router.navigate(['/users']);
-    },
-    error: (err) => {
-      const apiErrors = err.error?.data;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Form Invalid',
+        detail: 'Please fill all required fields correctly'
+      });
+      return;
+    }
 
-      if (apiErrors) {
-        // Loop over each field error
-        Object.keys(apiErrors).forEach(field => {
-          const control = this.userForm.get(field);
-          if (control) {
-            control.setErrors({ apiError: apiErrors[field] });
-          }
-          // Optional: show toast for each field error
+    const userData: any = {
+      firstName: this.userForm.get('firstName')?.value,
+      lastName: this.userForm.get('lastName')?.value,
+      email: this.userForm.get('email')?.value,
+      phone: this.userForm.get('phone')?.value
+    };
+
+    const request$ = this.isEditMode && this.userId
+      ? this.userService.updateUser(this.userId, userData)
+      : this.userService.createUser(userData);
+
+    request$.subscribe({
+      next: (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.isEditMode ? 'User Updated' : 'User Created',
+          detail: this.isEditMode ? 'User updated successfully' : 'User created successfully'
+        });
+        this.router.navigate(['/users']);
+      },
+      error: (err) => {
+        const apiErrors = err.error?.data;
+
+        if (apiErrors) {
+          // Loop over each field error
+          Object.keys(apiErrors).forEach(field => {
+            const control = this.userForm.get(field);
+            if (control) {
+              control.setErrors({ apiError: apiErrors[field] });
+            }
+            // Optional: show toast for each field error
+            this.messageService.add({
+              severity: 'error',
+              summary: `Error in ${field}`,
+              detail: apiErrors[field]
+            });
+          });
+        } else {
+          // Error عام لو مش موجود apiErrors
           this.messageService.add({
             severity: 'error',
-            summary: `Error in ${field}`,
-            detail: apiErrors[field]
+            summary: 'Request Failed',
+            detail: 'Something went wrong. Please try again.'
           });
-        });
-      } else {
-        // Error عام لو مش موجود apiErrors
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Request Failed',
-          detail: 'Something went wrong. Please try again.'
-        });
+        }
       }
-    }
-  });
-}
-
-
-  //  onSubmit(): void {
-  //   if (this.userForm.invalid) {
-  //     // Mark all fields as touched
-  //     Object.keys(this.userForm.controls).forEach(key => {
-  //       this.userForm.get(key)?.markAsTouched();
-  //     });
-
-  //     // Toast Error for invalid form
-  //     this.messageService.add({
-  //       severity: 'error',
-  //       summary: 'Form Invalid',
-  //       detail: 'Please fill all required fields correctly'
-  //     });
-  //     return;
-  //   }
-
-  //   // Build JSON object
-  //   const userData: any = {
-  //     firstName: this.userForm.get('firstName')?.value,
-  //     lastName: this.userForm.get('lastName')?.value,
-  //     email: this.userForm.get('email')?.value,
-  //     phone: this.userForm.get('phone')?.value
-  //   };
-
-  //   if (this.isEditMode && this.userId) {
-  //     // Update user
-  //     this.userService.updateUser(this.userId, userData).subscribe({
-  //       next: (res: any) => {
-  //         this.messageService.add({
-  //           severity: 'success',
-  //           summary: 'User Updated',
-  //           detail: 'User updated successfully'
-  //         });
-  //         this.router.navigate(['/users']);
-  //       },
-  //       error: (err: any) => {
-  //         console.error(err.error.data);
-  //         this.messageService.add({
-  //           severity: 'error',
-  //           summary: 'Update Failed',
-  //           detail: 'Could not update user. Please try again.'
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     // Create user
-  //     this.userService.createUser(userData).subscribe({
-  //       next: (res: any) => {
-  //         this.messageService.add({
-  //           severity: 'success',
-  //           summary: 'User Created',
-  //           detail: 'User created successfully'
-  //         });
-  //         this.router.navigate(['/users']);
-  //       },
-  //       error: (err: any) => {
-  //         console.error(err.error.data);
-  //         this.messageService.add({
-  //           severity: 'error',
-  //           summary: 'Creation Failed',
-  //           detail: 'Could not create user. Please try again.'
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
-
+    });
+  }
 
   onCancel(): void {
     this.router.navigate(['/users']);
   }
-
 
 }

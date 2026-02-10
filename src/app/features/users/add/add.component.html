@@ -167,18 +167,20 @@
     <button
       type="button"
       (click)="onCancel()"
-      class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:outline-none">
-      Cancel
+      class="px-4 py-2 text-sm font-medium cursor-pointer text-gray-700 bg-white border border-gray-300 rounded-md shadow hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:outline-none">
+    {{isViewMode ? 'Back' : 'Cancel'}}
     </button>
-
-    <button
+    @if(!isViewMode){
+        <button
       type="submit"
       [disabled]="userForm.invalid"
       [class.opacity-50]="userForm.invalid"
       [class.cursor-not-allowed]="userForm.invalid"
       class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:hover:bg-blue-500">
-      Submit
+       {{isEditMode  ? 'Edit User' : 'Add User'}}
     </button>
+    }
+
   </div>
 </form>
 

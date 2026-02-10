@@ -35,7 +35,7 @@
               class="w-full h-full object-cover" />
           </div>
           <div>
-            <h4 class="text-base font-semibold leading-tight">
+            <h4 [routerLink]="['/users/view', user?.id]"  class="cursor-pointer text-gray-800 hover:text-blue-600 transition text-base font-semibold leading-tight">
               {{user?.firstName}} {{user?.lastName}}
             </h4>
             <p class="text-sm text-gray-500">{{user?.email}}</p>

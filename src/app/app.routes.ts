@@ -9,7 +9,8 @@ export const routes: Routes = [
 
   { path: 'users/add', component: AddComponent },
   { path: 'users/edit/:id', component: AddComponent },
-  { path: 'users/:id', component: ViewComponent },     
+  { path: 'users/view/:id', component: AddComponent },
+  //{ path: 'users/:id', component: AddComponent },
 
   { path: 'users', component: UsersComponent },
   { path: '**', component: NotFoundComponent }
