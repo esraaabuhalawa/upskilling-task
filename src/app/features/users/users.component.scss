@@ -1,0 +1,34 @@
+.p-menu{
+  top: -63px !important
+}
+
+
+/* container الصورة */
+.img-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #eee;
+}
+
+/* الصورة نفسها */
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* النص */
+.user-info h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-info p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}

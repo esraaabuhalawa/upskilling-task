@@ -1,1 +1,81 @@
-<p>users works!</p>
+<div class="user-card">
+  <div>
+    <!-- Search Input -->
+    <div class="mb-3 mt-4">
+      <input type="text" id="search" [(ngModel)]="searchValue" (input)="onSearch()"
+        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Search by name, email..." />
+    </div>
+    <!--Add Button-->
+    <div class="flex justify-end">
+      <a routerLink="/users/add" class="inline-flex items-center gap-2
+         bg-blue-500 hover:bg-blue-600
+         text-white font-medium
+         px-3 py-2 rounded-lg
+         transition shadow-sm">
+        Add User
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </div>
+
+    <section class="border-2 border-gray-200 my-4 rounded">
+      @if (isLoading) {
+      <div class="card flex justify-center p-6">
+        <p-progress-spinner ariaLabel="loading"></p-progress-spinner>
+      </div>
+      }
+
+      @if (!isLoading) {
+      @if (displayedUsers.length > 0) {
+      @for (user of displayedUsers; track user.id) {
+      <div class="flex items-center justify-between p-2 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+            <img [src]="user?.picture || 'https://placehold.co/600x400'" [alt]="user?.firstName"
+              class="w-full h-full object-cover" />
+          </div>
+          <div>
+            <h4 class="text-base font-semibold leading-tight">
+              {{user?.firstName}} {{user?.lastName}}
+            </h4>
+            <p class="text-sm text-gray-500">{{user?.email}}</p>
+            <p class="text-sm text-gray-500">{{user?.phone}}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-3">
+          <a [routerLink]="['/users/edit', user.id]" class="w-9 h-9 flex items-center justify-center rounded-full
+                      text-blue-600 hover:bg-blue-100 transition" title="Edit">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+
+          <button type="button" (click)="confirmDelete(user)" class="w-9 h-9 flex items-center justify-center rounded-full
+                           text-red-600 hover:bg-red-100 transition" title="Delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      }
+      } @else {
+      <div class="p-4 text-center text-gray-500">
+        @if (searchValue) {
+        <span>No users found matching "{{searchValue}}"</span>
+        } @else {
+        <span>No users available</span>
+        }
+      </div>
+      }
+      }
+
+      @if (totalRecords > 0 && !isLoading) {
+      <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" [pageLinkSize]="2"
+        [showFirstLastIcon]="false" (onPageChange)="onPageChange($event)">
+      </p-paginator>
+      } <!---[rowsPerPageOptions]="[5, 10, 20]"-->
+    </section>
+  </div>
+
+
+  <p-toast></p-toast>
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>

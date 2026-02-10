@@ -1,0 +1,187 @@
+<section class="user-card max-w-xl">
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <!-- Image Upload -->
+  <div class="flex justify-center items-center mb-6">
+    <div class="relative">
+      <!-- Image Preview -->
+      <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer hover:border-blue-500 transition"
+           (click)="fileInput.click()">
+        <img
+          [src]="imagePreview || 'https://placehold.co/400x400/e2e8f0/64748b?text=Upload+Image'"
+          alt="Profile picture"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <!-- Hidden File Input -->
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        class="hidden"
+      />
+
+      <!-- Upload Icon Overlay -->
+      <div class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-blue-700 transition"
+           (click)="fileInput.click()">
+        <i class="fa-solid fa-camera text-sm"></i>
+      </div>
+
+      <!-- Remove Image Button -->
+      @if (imagePreview && selectedFile) {
+        <button
+          type="button"
+          (click)="removeImage($event)"
+          class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 transition">
+          <i class="fa-solid fa-times text-sm"></i>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <!-- First Name -->
+    <div>
+      <label for="first_name" class="block mb-2 text-sm font-medium text-gray-700">
+        First name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="first_name"
+        formControlName="firstName"
+        placeholder="John"
+        [class.border-red-500]="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+        class="block  w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+       @if(userForm.get('firstName')?.errors?.['apiError']){
+        <div class="text-red-500 text-sm mt-1">
+          {{ userForm.get('firstName')?.errors?.['apiError'] }}
+        </div>
+      }
+      @if (userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched) {
+        <p class="mt-1 text-xs text-red-500">
+          @if (userForm.get('firstName')?.errors?.['required']) {
+            First name is required
+          }
+          @if (userForm.get('firstName')?.errors?.['minlength']) {
+            First name must be at least 2 characters
+          }
+        </p>
+      }
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <label for="last_name" class="block mb-2 text-sm font-medium text-gray-700">
+        Last name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="last_name"
+        formControlName="lastName"
+        placeholder="Doe"
+        [class.border-red-500]="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      @if(userForm.get('lastName')?.errors?.['apiError']){
+        <div class="text-red-500 text-sm mt-1">
+          {{ userForm.get('lastName')?.errors?.['apiError'] }}
+        </div>
+      }
+      @if (userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched) {
+        <p class="mt-1 text-xs text-red-500">
+          @if (userForm.get('lastName')?.errors?.['required']) {
+            Last name is required
+          }
+          @if (userForm.get('lastName')?.errors?.['minlength']) {
+            Last name must be at least 2 characters
+          }
+        </p>
+      }
+    </div>
+
+    <!-- Phone -->
+    <div>
+      <label for="phone" class="block mb-2 text-sm font-medium text-gray-700">
+        Phone number <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="tel"
+        id="phone"
+        formControlName="phone"
+        placeholder="1234567890"
+        [class.border-red-500]="userForm.get('phone')?.invalid && userForm.get('phone')?.touched"
+        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      @if(userForm.get('phone')?.errors?.['apiError']){
+        <div class="text-red-500 text-sm mt-1">
+          {{ userForm.get('phone')?.errors?.['apiError'] }}
+        </div>
+      }
+      @if (userForm.get('phone')?.invalid && userForm.get('phone')?.touched) {
+        <p class="mt-1 text-xs text-red-500">
+          @if (userForm.get('phone')?.errors?.['required']) {
+            Phone number is required
+          }
+          @if (userForm.get('phone')?.errors?.['pattern']) {
+            Phone number must be 10-15 digits
+          }@else {}
+        </p>
+      }
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="block mb-2 text-sm font-medium text-gray-700">
+        Email address <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="john.doe@company.com"
+        [class.border-red-500]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      @if(userForm.get('email')?.errors?.['apiError']){
+        <div class="text-red-500 text-sm mt-1">
+          {{ userForm.get('email')?.errors?.['apiError'] }}
+        </div>
+      }
+      @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+        <p class="mt-1 text-xs text-red-500">
+          @if (userForm.get('email')?.errors?.['required']) {
+            Email is required
+          }
+          @if (userForm.get('email')?.errors?.['email']) {
+            Please enter a valid email address
+          }
+        </p>
+      }
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex justify-end gap-3">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:outline-none">
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="userForm.invalid"
+      [class.opacity-50]="userForm.invalid"
+      [class.cursor-not-allowed]="userForm.invalid"
+      class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:hover:bg-blue-500">
+      Submit
+    </button>
+  </div>
+</form>
+
+</section>
+
+<p-toast></p-toast>

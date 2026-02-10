@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +10,18 @@ export class UsersService {
 
   private readonly httpClient = inject(HttpClient);
 
-  //all Users Data
-  getAllUsers() {
-    return this.httpClient.get(`${environment.baseUrl}user`)
+  // //all Users Data
+
+  getAllUsers(page: number = 0, limit: number = 2): Observable<any> {
+    return this.httpClient.get(`https://dummyapi.io/data/v1/user?page=${page}&limit=${limit}`);
   }
 
   //get User Data
-  getUserData(id: string) {
+  getUserById(id: string | null): Observable<any> {
     return this.httpClient.get(`${environment.baseUrl}user/${id}`)
   }
   //Add User
-  addUser(data: object) {
+  createUser(data: object) {
     return this.httpClient.post(`${environment.baseUrl}user/create`, data)
   }
 
