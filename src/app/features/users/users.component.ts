@@ -47,7 +47,7 @@ export class UsersComponent implements OnInit {
   // Fetch all users once for frontend filtering
   fetchUsers() {
     this.isLoading = true;
-    this.userService.getAllUsers().subscribe({
+    this.userService.getAllUsers(0,50).subscribe({
       next: (res: any) => {
         this.allUsers = res.data;
         this.filteredUsers = res.data;
