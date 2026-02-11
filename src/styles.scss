@@ -1,13 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
-*{
+
+//General Roles
+* {
   box-sizing: border-box;
 }
+
 body {
   font-family: "Roboto", sans-serif;
   height: 100vh;
   background:
-    linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)),
+    -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .6)), to(rgba(0, 0, 0, .6))),
+    url('/image.jpg');
+  background:
+    -o-linear-gradient(rgba(0, 0, 0, .6), rgba(0, 0, 0, .6)),
+    url('/image.jpg');
+  background:
+    linear-gradient(rgba(0, 0, 0, .6), rgba(0, 0, 0, .6)),
     url('/image.jpg');
 
   background-size: cover;
@@ -17,47 +26,107 @@ body {
 }
 
 .user-card {
-  padding: 12px 16px;
+  padding: 34px 26px;
   border-radius: 12px;
-  background: rgba(255,255,255,.9);
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  margin-bottom: 12px;
-  width: 100%;
-  padding: 40px;
-  min-height: 60vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #261a1059;
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
 }
 
+@layer components {
+  .card-width {
+    @apply w-[90%] md:w-2/3 lg:w-1/2;
+  }
+}
+
+::-webkit-input-placeholder {
+  color: #d3cdcd
+}
+
+::-moz-placeholder {
+  color: #d3cdcd
+}
+
+:-ms-input-placeholder {
+  color: #d3cdcd
+}
+
+::-ms-input-placeholder {
+  color: #d3cdcd
+}
+
+::placeholder {
+  color: #d3cdcd
+}
+
+input:focus {
+  outline: none;
+}
+
+// prime ng paginator
 .p-paginator {
-  justify-content: flex-end !important; /* move to right */
+  -webkit-box-pack: end !important;
+      -ms-flex-pack: end !important;
+          justify-content: flex-end !important;
   padding: 0 !important;
-  background: transparent !important; /* remove bg */
+  background: transparent !important;
   color: #1f2937 !important;
-  margin: 20px 5px;       /* text-gray-800 */
+  margin: 0px 5px;
+  margin-top: 30px;
 }
 
 /* Paginator page links */
+.p-paginator-pages{
+  gap:3px;
+}
 .p-paginator .p-paginator-page {
-  border: none; /* border-gray-300 */
+  border: none;
   padding: 0.25rem 0.5rem;
   margin: 0 0.15rem;
   cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -o-transition: all 0.2s;
   transition: all 0.2s;
 }
 
-.p-paginator .p-paginator-page.p-highlight {
-  background-color: #3b82f6; /* bg-blue-500 */
-  color: white;
-  border-color: #3b82f6;
+.p-paginator-page.p-paginator-page-selected {
+  background-color: #f2b50b !important;
+  color: white !important;
+  border-color: #f2b50b;
 }
 
 .p-paginator .p-paginator-page:hover {
-  background-color: #60a5fa; /* bg-blue-400 */
-  color: white;
+  background-color: #a77a00 !important;
+  color: white!important;
 }
 
-::placeholder{
-  color:#d3cdcd
+/* Custom dialog styles */
+.p-confirmdialog .p-dialog-content {
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+      -ms-flex-direction: column !important;
+          flex-direction: column !important;
+  gap: 2rem !important;
+}
+
+.p-dialog-footer {
+  padding: 1rem 2rem;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
+}
+
+.pi-exclamation-triangle:before {
+  font-size: 3rem;
+  color: red !important;
+}
+
+.p-button.p-confirmdialog-reject-button {
+  background: red !important;
+  border-color: transparent;
+}
+
+.p-button.p-confirmdialog-accept-button {
+  background: #f2b50b !important;
+  border-color: transparent;
 }

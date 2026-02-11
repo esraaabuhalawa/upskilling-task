@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { UsersComponent } from './features/users/users.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { ViewComponent } from './features/users/view/view.component';
 import { AddComponent } from './features/users/add/add.component';
 
 export const routes: Routes = [
@@ -10,7 +9,6 @@ export const routes: Routes = [
   { path: 'users/add', component: AddComponent },
   { path: 'users/edit/:id', component: AddComponent },
   { path: 'users/view/:id', component: AddComponent },
-  //{ path: 'users/:id', component: AddComponent },
 
   { path: 'users', component: UsersComponent },
   { path: '**', component: NotFoundComponent }

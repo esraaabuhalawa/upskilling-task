@@ -7,6 +7,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-add',
@@ -15,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     InputTextModule,
     ButtonModule,
     FileUploadModule,
+    ProgressSpinner,
     ToastModule,
   ],
   providers: [MessageService],
@@ -129,6 +131,8 @@ export class AddComponent implements OnInit {
     this.userForm.patchValue({ photo: null });
   }
 
+  isSubmitting: boolean = false;
+
   onSubmit(): void {
     if (this.userForm.invalid) {
       Object.keys(this.userForm.controls).forEach(key => {
@@ -142,6 +146,7 @@ export class AddComponent implements OnInit {
       return;
     }
 
+    this.isSubmitting = true;
     const userData: any = {
       firstName: this.userForm.get('firstName')?.value,
       lastName: this.userForm.get('lastName')?.value,
@@ -156,13 +161,20 @@ export class AddComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.messageService.add({
-          severity: 'success',
-          summary: this.isEditMode ? 'User Updated' : 'User Created',
-          detail: this.isEditMode ? 'User updated successfully' : 'User created successfully'
-        });
-        this.router.navigate(['/users']);
+      severity: 'success',
+      summary: this.isEditMode ? 'User Updated' : 'User Created',
+      detail: this.isEditMode
+        ? 'User updated successfully'
+        : 'User created successfully',
+      life: 2000
+    });
+
+    setTimeout(() => {
+      this.router.navigate(['/users']);
+    }, 2000);
       },
       error: (err) => {
+        this.isSubmitting = false;
         const apiErrors = err.error?.data;
 
         if (apiErrors) {
@@ -187,7 +199,10 @@ export class AddComponent implements OnInit {
             detail: 'Something went wrong. Please try again.'
           });
         }
-      }
+      },
+      complete: () => {
+      this.isSubmitting = false;
+    }
     });
   }
 

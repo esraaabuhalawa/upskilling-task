@@ -1,15 +1,15 @@
-<div class="user-card">
-  <div>
+<div class="flex flex-wrap justify-center items-center min-h-screen">
+  <div class="user-card card-width">
     <!-- Search Input -->
     <div class="mb-3 mt-4">
       <input type="text" id="search" [(ngModel)]="searchValue" (input)="onSearch()"
-        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        class="block w-full px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
         placeholder="Search by name, email..." />
     </div>
     <!--Add Button-->
-    <div class="flex justify-end">
-      <a routerLink="/users/add" class="inline-flex items-center gap-2
-         bg-blue-500 hover:bg-blue-600
+    <div class="flex flex-wrap justify-end">
+      <a routerLink="/users/add" class="inline-flex flex-wrap items-center gap-2
+         bg-yellow-500 hover:bg-yellow-8a00
          text-white font-medium
          px-3 py-2 rounded-lg
          transition shadow-sm">
@@ -18,9 +18,9 @@
       </a>
     </div>
 
-    <section class="border-2 border-gray-200 my-4 rounded">
+    <section class="my-4 rounded">
       @if (isLoading) {
-      <div class="card flex justify-center p-6">
+      <div class="card flex flex-wrap justify-center p-6">
         <p-progress-spinner ariaLabel="loading"></p-progress-spinner>
       </div>
       }
@@ -28,40 +28,42 @@
       @if (!isLoading) {
       @if (displayedUsers.length > 0) {
       @for (user of displayedUsers; track user.id) {
-      <div class="flex items-center justify-between p-2 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+      <div class="flex flex-wrap items-center justify-between p-2 mb-2 border-b border-yellow-950">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden flex flex-wrap-shrink-0">
             <img [src]="user?.picture || 'https://placehold.co/600x400'" [alt]="user?.firstName"
               class="w-full h-full object-cover" />
           </div>
           <div>
-            <h4 [routerLink]="['/users/view', user?.id]"  class="cursor-pointer text-gray-800 hover:text-blue-600 transition text-base font-semibold leading-tight">
+            <h4 [routerLink]="['/users/view', user?.id]"
+              class="cursor-pointer text-red-50 hover:text-yellow-600 transition text-[14px] sm:text-base font-semibold leading-tight">
               {{user?.firstName}} {{user?.lastName}}
             </h4>
-            <p class="text-sm text-gray-500">{{user?.email}}</p>
-            <p class="text-sm text-gray-500">{{user?.phone}}</p>
+            <p class="text-sm text-white-500">{{user?.email}}</p>
+            <p class="text-sm text-white-500">{{user?.phone}}</p>
           </div>
         </div>
 
-        <div class="flex items-center justify-center gap-3">
-          <a [routerLink]="['/users/edit', user.id]" class="w-9 h-9 flex items-center justify-center rounded-full
-                      text-blue-600 hover:bg-blue-100 transition" title="Edit">
+        <div class="flex flex-wrap items-center justify-center ms-auto gap-3">
+          <a [routerLink]="['/users/edit', user.id]" class="w-9 h-9 flex flex-wrap items-center justify-center rounded-full
+                      text-yellow-600 hover:bg-blue-100 transition" title="Edit">
             <i class="fa-solid fa-pen-to-square"></i>
           </a>
 
-          <button type="button" (click)="confirmDelete(user)" class="w-9 h-9 flex items-center justify-center rounded-full
-                           text-red-600 hover:bg-red-100 transition" title="Delete">
+          <button type="button" (click)="confirmDelete(user)" class="w-9 h-9 flex flex-wrap items-center
+          justify-center rounded-full
+                           text-red-600 hover:bg-blue-100 cursor-pointer transition" title="Delete">
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
       </div>
       }
       } @else {
-      <div class="p-4 text-center text-gray-500">
+      <div class="p-4 text-center text-white-500">
         @if (searchValue) {
-        <span>No users found matching "{{searchValue}}"</span>
+        <span class="text-red-50">No users found matching "{{searchValue}}"</span>
         } @else {
-        <span>No users available</span>
+        <span class="text-red-50">No users available</span>
         }
       </div>
       }
@@ -74,8 +76,6 @@
       } <!---[rowsPerPageOptions]="[5, 10, 20]"-->
     </section>
   </div>
-
-
   <p-toast></p-toast>
   <!-- Confirmation Dialog -->
-  <p-confirmDialog></p-confirmDialog>
+  <p-confirmDialog ></p-confirmDialog>
