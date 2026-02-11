@@ -8,7 +8,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
-
 @Component({
   selector: 'app-add',
   imports: [
@@ -29,7 +28,9 @@ export class AddComponent implements OnInit {
   selectedFile: File | null = null;
   userId: string | null = null;
   isEditMode: boolean = false;
-
+  isViewMode: boolean = false;
+  isSubmitting: boolean = false;
+  
   constructor(
     private fb: FormBuilder,
     private userService: UsersService,
@@ -38,23 +39,36 @@ export class AddComponent implements OnInit {
     private messageService: MessageService
   ) { }
 
-  isViewMode: boolean = false;
   ngOnInit(): void {
     this.initializeForm();
 
-    // Check if we're in edit mode
-    this.userId = this.route.snapshot.paramMap.get('id');
+    // Subscribe to route params and url changes
+    this.route.paramMap.subscribe((params) => {
+      this.userId = params.get('id');
 
-    if (this.userId) {
-      const path = this.route.snapshot.url[1]?.path;
-      if (path === 'edit') {
-        this.isEditMode = true;
-        this.loadUserData();
-      } else if (path === 'view') {
-        this.isViewMode = true;
-        this.loadUserData();
+      if (this.userId) {
+        // Subscribe to url segments to detect edit/view
+        this.route.url.subscribe((urlSegments) => {
+          const path = urlSegments[1]?.path;
+
+          if (path === 'edit') {
+            this.isEditMode = true;
+            this.isViewMode = false;
+            this.loadUserData();
+          } else if (path === 'view') {
+            this.isViewMode = true;
+            this.isEditMode = false;
+            this.loadUserData();
+          } else {
+            this.isEditMode = false;
+            this.isViewMode = false;
+          }
+        });
+      } else {
+        this.isEditMode = false;
+        this.isViewMode = false;
       }
-    }
+    });
   }
 
   initializeForm(): void {
@@ -131,8 +145,6 @@ export class AddComponent implements OnInit {
     this.userForm.patchValue({ photo: null });
   }
 
-  isSubmitting: boolean = false;
-
   onSubmit(): void {
     if (this.userForm.invalid) {
       Object.keys(this.userForm.controls).forEach(key => {
@@ -161,17 +173,17 @@ export class AddComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.messageService.add({
-      severity: 'success',
-      summary: this.isEditMode ? 'User Updated' : 'User Created',
-      detail: this.isEditMode
-        ? 'User updated successfully'
-        : 'User created successfully',
-      life: 2000
-    });
+          severity: 'success',
+          summary: this.isEditMode ? 'User Updated' : 'User Created',
+          detail: this.isEditMode
+            ? 'User updated successfully'
+            : 'User created successfully',
+          life: 2000
+        });
 
-    setTimeout(() => {
-      this.router.navigate(['/users']);
-    }, 2000);
+        setTimeout(() => {
+          this.router.navigate(['/users']);
+        }, 2000);
       },
       error: (err) => {
         this.isSubmitting = false;
@@ -192,7 +204,7 @@ export class AddComponent implements OnInit {
             });
           });
         } else {
-          // Error عام لو مش موجود apiErrors
+          // Global error
           this.messageService.add({
             severity: 'error',
             summary: 'Request Failed',
@@ -201,13 +213,12 @@ export class AddComponent implements OnInit {
         }
       },
       complete: () => {
-      this.isSubmitting = false;
-    }
+        this.isSubmitting = false;
+      }
     });
   }
 
   onCancel(): void {
     this.router.navigate(['/users']);
   }
-
 }

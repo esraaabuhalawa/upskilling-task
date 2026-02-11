@@ -12,7 +12,7 @@ export class UsersService {
   private readonly httpClient = inject(HttpClient);
 
   //all Users Data
-  getAllUsers(page: number = 0, limit: number = 2): Observable<any> {
+  getAllUsers(page: number = 0, limit: number = 5): Observable<any> {
     return this.httpClient.get(`https://dummyapi.io/data/v1/user?page=${page}&limit=${limit}`);
   }
 

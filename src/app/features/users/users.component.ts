@@ -9,7 +9,6 @@ import { ToastModule } from 'primeng/toast';
 import { PaginatorModule } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { User } from '../../core/models/user/user.interface';
-
 @Component({
   selector: 'app-users',
   imports: [
@@ -48,7 +47,7 @@ export class UsersComponent implements OnInit {
   // Fetch all users once for frontend filtering
   fetchUsers() {
     this.isLoading = true;
-    this.userService.getAllUsers(0, 50).subscribe({
+    this.userService.getAllUsers().subscribe({
       next: (res: any) => {
         this.allUsers = res.data;
         this.filteredUsers = res.data;
@@ -121,7 +120,6 @@ export class UsersComponent implements OnInit {
             console.error(err);
           }
         });
-
       }
     });
   }

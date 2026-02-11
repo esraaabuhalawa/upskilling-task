@@ -1,9 +1,43 @@
+<div class="fixed inset-0 z-0">
+  <img alt="Vintage rotary phone on a weathered wooden table"
+    class="w-full h-full object-cover grayscale-[20%] brightness-[55%] contrast-[110%]"
+    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8PnnWUBy-FWd91sf0sBThIYiHRZajtpnUTFbo9leTOOFaEMr-cyoOOOIrDVXS0VIqDcrDaKX9lwO6OWXNBbrc_2hgvSfwLM04-8xlc5ez3plOjmIk5VCSir82pDkH2ZSvOX42odtMy-6JkANboLWxviyTHxXBVg-tGqstKn9DC1XjAybqgLaGoebYfOa3YkBxwxOGmc660gTtEWyXG_e5nWWzCHJvaiI3TGQKvLQFISAu7U62d3-BgosEQT1OAgEBbkaswc1L2g" />
+  <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20"></div>
+</div>
 
-<div class="flex flex-wrap justify-center items-center min-h-screen">
-  <div class="user-card card-width">
-    <h1 class="text-3xl text-center text-red-100">Error 404</h1>
-    <p class="text-2xl text-red-50 text-center py-10">
-      Page NOt Found
-    </p>
+<section class="relative z-10 flex items-center justify-center min-h-screen p-6">
+  <div class="max-w-xl w-full">
+    <div class="glass-card rounded-3xl p-12 md:p-16 text-center shadow-2xl border border-white/5">
+
+      <h1 class="font-display text-8xl md:text-9xl text-white font-bold mb-4 tracking-tighter opacity-90 retro-glow">
+        404
+      </h1>
+
+      <p class="text-gray-300 text-lg md:text-xl mb-10 font-light leading-relaxed max-w-sm mx-auto">
+        We're sorry, but page is not found. Please check the directory and try again.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay-2">
+        <a routerLink="/"
+          class="group relative inline-flex items-center gap-2 px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-yellow-500/50">
+          <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Home
+        </a>
+
+        <button onclick="window.history.back()"
+          class="group inline-flex items-center gap-2 px-8 py-4 bg-transparent hover:bg-white hover:bg-opacity-20 hover:text-gray-600
+           cursor-pointer text-white font-semibold rounded-xl border-2 border-white border-opacity-50 hover:border-opacity-100 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
+          <svg class="w-5 h-5 transition-transform group-hover:rotate-[-360deg] duration-500" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
+          </svg>
+          Go Back
+        </button>
+      </div>
+    </div>
   </div>
-  </div>
+</section>
