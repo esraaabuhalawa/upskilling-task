@@ -89,7 +89,7 @@ export class AddComponent implements OnInit {
 
   loadUserData(): void {
     if (!this.userId) return;
-
+    
     this.userService.getUserById(this.userId).subscribe({
       next: (user: any) => {
         this.userForm.patchValue({
@@ -104,6 +104,11 @@ export class AddComponent implements OnInit {
         }
       },
       error: (err: any) => {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load user data. Please try again.',
+        });
         console.error('Error loading user:', err);
       }
     });
