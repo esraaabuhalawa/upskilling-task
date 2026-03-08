@@ -1,6 +1,5 @@
-import { UsersService } from './../../../core/services/users/users.service';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -8,6 +7,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { ImageUploadComponent } from '../../../../shared/components/image-upload/image-upload.component';
+import { FormInputComponent } from "../../../../shared/components/form-input/form-input.component";
+import { UsersService } from '../../../../core/services/users/users.service';
+import { FormValidators } from '../../../../core/validators/form.validators';
+
 @Component({
   selector: 'app-add',
   imports: [
@@ -17,11 +21,14 @@ import { ProgressSpinner } from 'primeng/progressspinner';
     FileUploadModule,
     ProgressSpinner,
     ToastModule,
+    ImageUploadComponent,
+    FormInputComponent
   ],
   providers: [MessageService],
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss',
 })
+
 export class AddComponent implements OnInit {
   userForm!: FormGroup;
   imagePreview: string | null = null;
@@ -30,14 +37,13 @@ export class AddComponent implements OnInit {
   isEditMode: boolean = false;
   isViewMode: boolean = false;
   isSubmitting: boolean = false;
-  
-  constructor(
-    private fb: FormBuilder,
-    private userService: UsersService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private messageService: MessageService
-  ) { }
+  existingPhotoUrl: string | null = null;
+
+  private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(UsersService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly messageService = inject(MessageService);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -73,10 +79,10 @@ export class AddComponent implements OnInit {
 
   initializeForm(): void {
     this.userForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
+      firstName: ['', FormValidators.name],
+      lastName: ['', FormValidators.name],
+      email: ['', FormValidators.email],
+      phone: ['', FormValidators.phone],
       photo: this.fb.control<File | null>(null)
     });
   }
@@ -96,60 +102,30 @@ export class AddComponent implements OnInit {
         if (this.isViewMode) {
           this.userForm.disable();
         }
-        // Load existing image
-        // if (user.picture) {
-        //   this.imagePreview = user.picture;
-        // }
       },
       error: (err: any) => {
         console.error('Error loading user:', err);
       }
     });
   }
+  currentPreview: string | null = null;
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024;
-      if (file.size > maxSize) {
-        alert('File size should not exceed 5MB');
-        return;
-      }
-
-      this.selectedFile = file;
-      this.userForm.patchValue({ photo: file });
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreview = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+  /** Called when the user picks a new image */
+  onPhotoSelected(file: File): void {
+    this.userForm.patchValue({ photo: file });
+    // currentPreview is updated automatically via (previewChanged)
   }
 
-  removeImage(event: Event): void {
-    event.stopPropagation();
-    this.selectedFile = null;
-    this.imagePreview = null;
-    this.userForm.patchValue({ photo: null });
+  /** Called when the user clicks the remove (✕) button */
+  onPhotoRemoved(): void {
+    this.userForm.patchValue({ photo: null, photoUrl: null });
+    this.currentPreview = null;
   }
 
   onSubmit(): void {
     if (this.userForm.invalid) {
-      Object.keys(this.userForm.controls).forEach(key => {
-        this.userForm.get(key)?.markAsTouched();
-      });
+      this.userForm.markAllAsTouched();
+
       this.messageService.add({
         severity: 'error',
         summary: 'Form Invalid',

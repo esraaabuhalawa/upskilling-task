@@ -1,59 +1,188 @@
-# MyAngularApp
+# User Management CRUD App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.15.
+A modern **User Management web application** built with **Angular 20** and **TypeScript**.  
+This project demonstrates best practices in Angular development including **feature-based architecture, reusable components, reactive programming, search optimization, and pagination handling**.
 
-## Development server
+## 🎯 Features
 
-To start a local development server, run:
+- **User Management (CRUD)**: Create, read, update, and delete user records
+- **Users Listing**: Display users in a structured table
+- **Search Functionality**: Real-time search with debounced input for performance optimization
+- **Pagination**: Navigate large datasets efficiently
+- **Responsive Design**: Clean UI built with TailwindCSS
+- **Reusable Components**: Shared components for search input and UI elements
+- **Custom Validators**: Reusable form validation logic
+- **Image Upload (UI Only)**: Image input with preview when adding a user (not sent to API)
+- **Feature-Based Architecture**: Scalable project structure separating core, shared, and feature modules
+- **Error Handling**: Structured service layer for API communication
+
+## 🛠 Tech Stack
+
+### Frontend Framework
+
+- **Angular 20** – Modern Angular framework with standalone architecture
+- **TypeScript** – Type-safe programming
+- **TailwindCSS** – Utility-first CSS framework
+
+### UI Components & Libraries
+
+- **PrimeNG** – UI component library for Angular
+- **PrimeIcons** – Icons used by PrimeNG components
+- **Font Awesome** – Additional icon library
+
+### State Management & Data
+
+- **RxJS** – Reactive programming with observables
+
+### Styling & Build Tools
+
+- **TailwindCSS**
+- **PostCSS**
+
+### Development & Testing
+
+- **Angular CLI 20** – Development and build tool
+- **Karma** – Test runner
+- **Jasmine** – Unit testing framework
+
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (v20 or higher)
+- **npm** (v10 or higher)
+- A modern web browser
+
+## 🚀 Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd E-commerce-project
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+   > Note: We use `--legacy-peer-deps` flag due to some peer dependency conflicts
+
+## 💻 Development Server
+
+Start the development server:
+
+```bash
+npm start
+```
+
+or
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+## 🏗 Building
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Development Build
 
 ```bash
-ng generate --help
+ng build --configuration development
 ```
 
-## Building
-
-To build the project run:
+### Production Build
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Build with Watch Mode
 
 ```bash
-ng test
+npm run watch
 ```
 
-## Running end-to-end tests
+## ✅ Testing
 
-For end-to-end (e2e) testing, run:
+### Run Unit Tests
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Unit tests are executed with [Karma](https://karma-runner.github.io) test runner. Tests are located in `*.spec.ts` files throughout the project.
 
-## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+📁 Project Structure
+src
+│
+├── app
+│   │
+│   ├── core
+│   │   ├── constants       # Application constants
+│   │   ├── interceptors    # HTTP interceptors (API handling, errors, etc.)
+│   │   ├── layouts
+│   │   │   └── default-layout  # Main application layout
+│   │   ├── models          # Global interfaces and types
+│   │   ├── services        # Core services used across the app
+│   │   └── validators      # Custom form validators
+│   │
+│   ├── features
+│   │   │
+│   │   ├── users           # Users feature module
+│   │   │   ├── components  # Reusable UI components for users
+│   │   │   └── pages
+│   │   │        ├── users  # Users list page
+│   │   │        └── add    # Add/Edit user page
+│   │   │
+│   │   └── not-found       # 404 page
+│   │
+│   ├── shared
+│   │   ├── components      # Shared reusable components
+│   │   └── directives      # Shared custom directives
+│   │
+│   ├── app.config.ts       # Angular app configuration
+│   ├── app.routes.ts       # Application routing
+│   └── app.ts              # Root component
+│
+└── assets
+
+This structure follows a feature-based architecture that improves maintainability and scalability.
+
+
+## 🚀 Deployment
+
+### Vercel Deployment
+
+The project is configured for deployment on Vercel with the following settings:
+
+- **Build Command**: `npm run build -- --configuration=production`
+- **Output Directory**: `dist/my-angular-app/browser`
+- **Install Command**: `npm install --legacy-peer-deps`
+
+### Deploy to Vercel
+
+```bash
+vercel
+```
+
+### Environment Variables
+
+Create a `.env.local` file for local development with necessary environment variables:
+
+```
+NG_APP_API_URL=https://dummyapi.io/data/v1/
+
+
+## ⚠️ Notes
+
+The image input in the form is not connected to the API.
+
+Images are not stored or retrieved from the backend.
+
+The image feature is implemented only for UI preview purposes.

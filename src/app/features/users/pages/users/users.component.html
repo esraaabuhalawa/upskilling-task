@@ -1,0 +1,47 @@
+<!-- Search Input -->
+<div class="mb-3 mt-4">
+  <app-search-input [placeholder]="config.searchPlaceholder" [debounce]="10" (searchChange)="onSearch($event)"></app-search-input>
+</div>
+
+<!--Add Button-->
+<div class="flex flex-wrap justify-end">
+  <a routerLink="/users/add" class="inline-flex flex-wrap items-center gap-2
+         bg-yellow-500 hover:bg-yellow-8a00
+         text-white font-medium
+         px-3 py-2 rounded-lg
+         transition shadow-sm">
+    Add User
+    <i class="fa-solid fa-user"></i>
+  </a>
+</div>
+
+<!---Users Section-->
+<section class="my-4 rounded">
+  @if (isLoading) {
+  <div class="card flex flex-wrap justify-center p-6">
+    <p-progress-spinner ariaLabel="loading"></p-progress-spinner>
+  </div>
+  }
+
+  @if (!isLoading && hasUsers){
+  @for (user of displayedUsers; track user.id) {
+  <app-user-card [user]="user" (deleteUser)="confirmDelete($event)"> </app-user-card>
+  }
+  } @else {
+  <div class="p-4 text-center text-white-500">
+    <app-empty-state [message]="searchValue ? 'No users found matching ' + searchValue : 'No users available'"
+      icon="fa-solid fa-user-xmark">
+    </app-empty-state>
+  </div>
+  }
+
+  @if (totalRecords > 0 && !isLoading) {
+  <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" [pageLinkSize]="2"
+    [showFirstLastIcon]="false" (onPageChange)="onPageChange($event)">
+  </p-paginator>
+  }
+</section>
+
+<p-toast />
+<!-- Confirmation Dialog -->
+<p-confirmDialog />

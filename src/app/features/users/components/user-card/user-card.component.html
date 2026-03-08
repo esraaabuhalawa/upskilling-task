@@ -1,0 +1,38 @@
+<div class="flex flex-wrap items-center justify-between p-2 mb-2 border-b border-yellow-950">
+
+  <div class="flex flex-wrap items-center gap-3">
+
+    <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden flex flex-shrink-0">
+      <img [src]="user.image" [alt]="user.firstName" appAppImgFallback class="w-full h-full object-cover" />
+    </div>
+
+    <div>
+      <a [routerLink]="['/users/view', user.id]"
+        class="cursor-pointer text-docuration text-red-50 hover:text-yellow-600 transition text-[14px] sm:text-base font-semibold leading-tight">
+        {{ user.firstName }} {{ user.lastName }}
+      </a>
+
+      <p class="text-sm text-white-500">
+        {{ user.phone }}
+      </p>
+    </div>
+
+  </div>
+
+  <div class="flex flex-wrap items-center justify-center ms-auto gap-3">
+
+    <a [routerLink]="['/users/edit', user.id]"
+      class="w-9 h-9 flex items-center justify-center rounded-full text-yellow-600 hover:bg-red-100 transition"
+      title="Edit">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </a>
+
+    <button type="button" (click)="confirmDelete()"
+      class="w-9 h-9 flex items-center justify-center rounded-full text-red-600 hover:bg-blue-100 cursor-pointer transition"
+      title="Delete">
+      <i class="fa-solid fa-trash"></i>
+    </button>
+
+  </div>
+
+</div>

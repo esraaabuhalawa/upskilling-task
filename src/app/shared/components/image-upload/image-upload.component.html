@@ -1,0 +1,37 @@
+<div class="image-uploader">
+  <!-- Avatar Ring + Preview -->
+  <div class="avatar-wrapper">
+    <div class="avatar-circle" (click)="fileInput.click()" [class.has-image]="imagePreview">
+      <img [src]="imagePreview || 'https://placehold.co/400x400/e2e8f0/64748b?text=Photo'" alt="Profile picture"
+        class="avatar-img" />
+      <!-- Hover overlay -->
+      <div class="avatar-overlay">
+        <i class="fa-solid fa-camera"></i>
+        <span>Change</span>
+      </div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden-input" />
+
+    <!-- Camera badge -->
+    <button type="button" class="camera-badge" (click)="fileInput.click()" title="Upload image">
+      <i class="fa-solid fa-camera"></i>
+    </button>
+
+    <!-- Remove button – only when a preview exists -->
+    @if (imagePreview) {
+    <button type="button" class="remove-badge" (click)="removeImage($event)" title="Remove image">
+      <i class="fa-solid fa-times"></i>
+    </button>
+    }
+  </div>
+
+  <!-- Validation error -->
+  @if (errorMessage) {
+  <p class="error-msg">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    {{ errorMessage }}
+  </p>
+  }
+</div>

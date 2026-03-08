@@ -1,0 +1,73 @@
+<section>
+  <!--Image Uploader-->
+  <div class="flex flex-wrap justify-center items-center mb-6">
+    <app-image-upload [existingImageUrl]="userForm.get('photoUrl')?.value" [maxFileSizeBytes]="2 * 1024 * 1024"
+      (fileSelected)="onPhotoSelected($event)" (previewChanged)="currentPreview = $event"
+      (fileRemoved)="onPhotoRemoved()" />
+
+    <!-- use the emitted preview anywhere in the parent -->
+    <!-- @if (currentPreview) {
+    <img [src]="currentPreview" alt="Preview" class="w-16 h-16 rounded object-cover" />
+    } -->
+  </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <!-- First Name -->
+      <div>
+        <app-form-input label="First name" inputId="first_name" placeholder="John" [required]="true"
+          [control]="$any(userForm.get('firstName'))" [errorMessages]="{
+              required: 'First name is required',
+              minlength: 'First name must be at least 2 characters'
+            }" />
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <app-form-input label="Last name" inputId="last_name" placeholder="Doe" [required]="true"
+          [control]="$any(userForm.get('lastName'))" [errorMessages]="{
+        required: 'Last name is required',
+        minlength: 'Last name must be at least 2 characters'
+      }" />
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <app-form-input label="Phone number" inputId="phone" type="tel" placeholder="1234567890" [required]="true"
+          [control]="$any(userForm.get('phone'))" [errorMessages]="{
+        required: 'Phone number is required',
+        pattern: 'Phone number must be 10–15 digits'
+      }" />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <app-form-input label="Email address" inputId="email" type="email" placeholder="john.doe@company.com"
+          [required]="true" [control]="$any(userForm.get('email'))" [errorMessages]="{
+        required: 'Email is required',
+        email: 'Please enter a valid email address'
+      }" />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex flex-wrap justify-between gap-3 mt-8">
+      <button type="button" (click)="onCancel()" class="px-4 py-2 text-sm font-medium cursor-pointer text-red-50 bg-red-700 border border-red-900
+      rounded-md shadow hover:bg-red-500 focus:ring-2 focus:ring-gray-500 focus:outline-none">
+        {{isViewMode ? 'Back' : 'Cancel'}}
+      </button>
+      @if(!isViewMode){
+      <button type="submit" class="px-4 py-2 text-sm cursor-pointer font-medium text-white bg-yellow-500 rounded-md shadow
+      hover:bg-yellow-600 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:hover:bg-blue-500">
+        @if(isSubmitting){
+        <p-progress-spinner strokeWidth="4" styleClass="w-1 h-1" animationDuration=".7s">
+        </p-progress-spinner>
+        }
+        {{isEditMode ? 'Edit User' : 'Add User'}}
+      </button>
+      }
+
+    </div>
+  </form>
+</section>
+<p-toast></p-toast>
